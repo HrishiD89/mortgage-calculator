@@ -15,9 +15,9 @@ const Result = () => {
       {isResultAvailable ? (
         <div className="flex flex-col mx-8 lg:m-8 ">
           <div>
-            <h4 className="font-bold text-xl text-white font-plusJakarta">
+            <h1 className="font-bold text-xl text-white font-plusJakarta">
               Your results
-            </h4>
+            </h1>
             <p className=" text-slate-300 text-[15px] max-lg:text-base mb-8 mt-3">
               Your results are shown below based on the information you
               provided. To adjust the results, edit the form and click
@@ -33,16 +33,16 @@ const Result = () => {
                     Your monthly repayment
                   </p>
                   <div className="pb-6 pt-4 border-b-[1px] border-[#2b414e] mb-6">
-                    <h1 className="text-5xl font-bold text-lime">£{result.monthlyRepayment.toFixed(2)}</h1>
+                    <h2 className="text-5xl font-bold text-lime">£{result.monthlyRepayment.toFixed(2)}</h2>
                   </div>
                 </div>
                 <div>
                   <p className=" text-slate-300 text-base">
                     Total you&apos;ll repay over the term
                   </p>
-                  <h4 className=" font-bold text-xl text-white my-3">
+                  <h2 className=" font-bold text-xl text-white my-3">
                   £{result.totalRepayment.toFixed(2)}
-                  </h4>
+                  </h2>
                 </div>
               </div>
             </div>
@@ -52,9 +52,9 @@ const Result = () => {
         <div className="flex justify-center items-center flex-col ">
           <img src={emptyResultlogo} alt="empty result logo" />
           <div className="flex flex-col justify-center items-center max-w-full lg:max-w-sm px-4">
-            <h4 className="font-plusJakarta font-bold text-lg text-white w-full text-center">
+            <h1 className="font-plusJakarta font-bold text-lg text-white w-full text-center">
               Result shown here
-            </h4>
+            </h1>
             <p className="w-full text-slate-300 text-center mt-4 text-[15px] max-lg:leading-8 leading-6">
               Complete the form and click &quot;calculate repayments&quot; to
               see what your monthly repayment would be.

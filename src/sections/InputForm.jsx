@@ -97,9 +97,9 @@ const InputForm = () => {
   return (
     <section className="w-full bg-white sm:rounded-t-3xl lg:rounded-l-3xl lg:rounded-r-none">
       <header className="flex justify-between max-sm:flex-col flex-row items-center max-sm:items-start max-sm:gap-1 px-8 py-4 max-lg:py-8 pb-2">
-        <h4 className="font-plusJakarta font-bold text-lg text-slate-900">
+        <h1 className="font-plusJakarta font-bold text-lg text-slate-900">
           Mortgage Calculator
-        </h4>
+        </h1>
         <button
           onClick={clearAll}
           className="text-slate-700 font-plusJakarta underline text-sm"
