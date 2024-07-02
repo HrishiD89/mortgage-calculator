@@ -3,132 +3,187 @@ import InputTag from "../components/Inputs.component";
 import CalIcon from "../assets/images/icon-calculator.svg";
 
 const InputForm = () => {
-  const [mortgageAmt, setMortgageAmt] = useState('');
-  const [interestRate, setInterestRate] = useState('');
-  const [mortgageTerm, setMortgageTerm] = useState('');
-  const [mortgageType, setMortgageType] = useState('');
+  const [formData, setFormData] = useState({
+    mortgageAmt: "",
+    interestRate: "",
+    mortgageTerm: "",
+    mortgageType: "",
+  });
+  const [result, setResult] = useState({
+    monthlyRepayment: 0,
+    totalRepayment: 0,
+  });
+  const [errors, setErrors] = useState({});
 
+  const handleInputChange = (e) => {
+    const { id, value } = e.target;
+    let formattedValue = value;
+    
+    if (id === "mortgageAmt") {
+      formattedValue = value
+        .replace(/\D/g, "")
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
 
+    setFormData((prevData) => ({
+      ...prevData,
+      [id]: formattedValue,
+    }));
+  };
 
-  const handleMortgageAmountChange = (e)=>{
-    const formattedValue = e.target.value.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    setMortgageAmt(formattedValue);
-  }
+  const validateForm = () => {
+    const newErrors = {};
+    const { mortgageAmt, interestRate, mortgageTerm, mortgageType } = formData;
 
-  const handleInterestRateChange = (e)=>{
-     setInterestRate(e.target.value)
-  }
-  const handleMortgageTermChange = (e)=>{
-    setMortgageTerm(e.target.value)
-  }
+    if (!mortgageAmt) newErrors.mortgageAmt = "This field is required";
+    if (!interestRate) newErrors.interestRate = "This field is required";
+    if (!mortgageTerm) newErrors.mortgageTerm = "This field is required";
+    if (mortgageType !== 'repayment' && mortgageType !== 'interestOnly') {
+      newErrors.mortgageType = "This field is required";
+    }
 
-  const handleMortgageTypeChange = (e)=>{{
-    setMortgageType(e.target.value)
-    console.log(e.target.value)
-  }}
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
+  const calculateRepayments = () => {
+    const { mortgageAmt, interestRate, mortgageTerm, mortgageType } = formData;
+    const P = parseFloat(mortgageAmt.replace(/,/g, ''));
+    const r = (parseFloat(interestRate) / 100) / 12;
+    const n = parseFloat(mortgageTerm) * 12;
 
-  const clearAll = ()=>{
-    setMortgageAmt('')
-    setInterestRate('')
-    setMortgageTerm('')
-    setMortgageType('')
-  }
+    let monthlyRepayment;
+
+    if (mortgageType === 'repayment') {
+      monthlyRepayment = P * (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+    } else {
+      monthlyRepayment = P * r;
+    }
+
+    const totalRepayment = monthlyRepayment * n;
+    
+    setResult({
+      monthlyRepayment,
+      totalRepayment,
+    });
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    if (validateForm()) {
+      calculateRepayments();
+    }
+  };
+
+  const clearAll = () => {
+    setFormData({
+      mortgageAmt: "",
+      interestRate: "",
+      mortgageTerm: "",
+      mortgageType: "",
+    });
+    setErrors({});
+    setResult({
+      monthlyRepayment: 0,
+      totalRepayment: 0,
+    });
+  };
 
   return (
-    <section className="w-full bg-white sm:rounded-t-3xl lg:rounded-l-3xl lg:rounded-r-none
-    ">
-      <header className="flex justify-between max-sm:flex-col flex-row items-center max-sm:items-start max-sm:gap-1 px-8 py-4 pb-2 ">
-        <h4 className="font-plusJakarta font-bold text-lg text-slate-900">Mortgage Calculator</h4>
-        <a 
-        onClick={clearAll} 
-        href="#" 
-        className="text-slate-700 font-plusJakarta underline text-sm">Clear All</a>
+    <section className="w-full bg-white sm:rounded-t-3xl lg:rounded-l-3xl lg:rounded-r-none">
+      <header className="flex justify-between max-sm:flex-col flex-row items-center max-sm:items-start max-sm:gap-1 px-8 py-4 max-lg:py-8 pb-2">
+        <h4 className="font-plusJakarta font-bold text-lg text-slate-900">
+          Mortgage Calculator
+        </h4>
+        <button
+          onClick={clearAll}
+          className="text-slate-700 font-plusJakarta underline text-sm"
+        >
+          Clear All
+        </button>
       </header>
       <div className="px-8 pb-4 pt-2 font-plusJakarta">
-        <form action="/">
-          <InputTag 
+        <form onSubmit={handleFormSubmit}>
+          <InputTag
             label="Mortgage Amount"
             inputSymbol="£"
-            id="mortgageAmt" 
-            type="currency" 
-            value={mortgageAmt}
-            onChange={handleMortgageAmountChange}
+            id="mortgageAmt"
+            type="text"
+            value={formData.mortgageAmt}
+            errorMssg={errors.mortgageAmt}
+            onChange={handleInputChange}
           />
           <div className="flex justify-between max-sm:gap-1 gap-5 max-sm:flex-col">
-            <InputTag 
+            <InputTag
               label="Mortgage Term"
               inputSymbol="years"
-              id="mortgageTerm" 
-              type="number" 
-              value={mortgageTerm}
-              onChange={handleMortgageTermChange}
+              id="mortgageTerm"
+              type="number"
+              value={formData.mortgageTerm}
+              errorMssg={errors.mortgageTerm}
+              onChange={handleInputChange}
             />
-            <InputTag 
+            <InputTag
               label="Interest Rate"
               inputSymbol="%"
-              id="interestRate" 
-              type="number" 
-              value={interestRate}
-              onChange={handleInterestRateChange}
+              id="interestRate"
+              type="number"
+              value={formData.interestRate}
+              errorMssg={errors.interestRate}
+              onChange={handleInputChange}
             />
           </div>
-          
+
           <div className="mt-4">
-            <label htmlFor="RepaymentType" className="cursor-pointer text-sm text-slate-700  ">Mortgage Type</label>
+            <label className="cursor-pointer text-sm text-slate-700">
+              Mortgage Type
+            </label>
 
-            <div className="radio-btn-container">
-                <input 
-                id='RepaymentType' 
-                type="radio" 
-                name="RepaymentType" 
-                value="repayment"
-                checked={mortgageType === 'repayment'}
-                onChange={handleMortgageTypeChange}
-                className="custom-radio"
+            {['repayment', 'interestOnly'].map((type) => (
+              <div key={type} className="radio-btn-container">
+                <input
+                  id={type}
+                  type="radio"
+                  name="mortgageType"
+                  value={type}
+                  checked={formData.mortgageType === type}
+                  onChange={handleInputChange}
+                  className="custom-radio"
                 />
-                <label 
-                htmlFor="RepaymentType"
-                className="text-md  w-full font-bold text-slate-900 ml-12">Repayment</label>
-            </div>
+                <label
+                  htmlFor={type}
+                  className="text-md w-full font-bold text-slate-900 ml-12"
+                >
+                  {type === 'repayment' ? 'Repayment' : 'Interest Only'}
+                </label>
+              </div>
+            ))}
+            <p className="text-red font-plusJakarta text-sm mt-[-2px] font-semibold">
+              {errors.mortgageType}
+            </p>
+          </div>
 
-            <div className="radio-btn-container">
-              
-              <input 
-              id='InterestOnly' 
-              type="radio" 
-              name="InterestOnly" 
-              value="interestOnly"
-              checked={mortgageType === 'interestOnly'}
-              onChange={handleMortgageTypeChange}
-              className="custom-radio"
+          <div className="w-full flex max-lg:justify-start max-lg:items-center">
+            <div className="w-[300px] border-2 my-6 h-full bg-lime py-3 px-6 rounded-full flex flex-wrap gap-4">
+              <img
+                src={CalIcon}
+                width={24}
+                height={24}
+                alt="calculator icon"
+                className="hide-on-small-screen"
               />
-              <label  
-              htmlFor="InterestOnly"
-              className=" w-full text-md font-bold text-slate-900 ml-12">Interest Only</label>
+              <button
+                type="submit"
+                className="text-lg font-bold text-slate-900"
+              >
+                Calculate Repayments
+              </button>
             </div>
           </div>
-
-          {/* button */}
-          <div className="w-ful flex max-lg:justify-center max-lg:items-center">
-          <div className="w-[300px] border-2 my-6 h-full bg-lime py-3 px-6 rounded-full flex flex-wrap gap-4">
-            <img 
-            src={CalIcon} 
-            width={24} 
-            height={24} 
-            alt="calculator icon"
-            className="hide-on-small-screen" />
-            <button 
-            type="submit"
-            className="text-lg font-bold text-slate-900">Calculate Repayments</button>
-          </div>
-          </div>
-
-
         </form>
       </div>
     </section>
   );
-}
+};
 
 export default InputForm;
