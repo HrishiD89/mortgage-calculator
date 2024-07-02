@@ -6,9 +6,9 @@ const InputTag = ({ id, type, value, onChange ,label,inputSymbol}) => {
 
   return (
     
-    <label className="cursor-pointer text-sm text-slate-700 mt-2" htmlFor={id}>
+    <label className="cursor-pointer text-sm text-slate-700 mt-4" htmlFor={id}>
     {label}
-    <div className={`cursor-pointer flex justify-start items-center w-full border border-slate-700 rounded-md h-10 mt-2 focus-within:ring-2 focus-within:ring-lime
+    <div className={`cursor-pointer flex justify-start items-center w-full border border-slate-700 rounded-md h-12 mt-2 focus-within:ring-2 focus-within:ring-lime
     ${
         id === 'mortgageAmt' ? 'flex-row-reverse' : 'flex-row'
      }`}
@@ -18,9 +18,8 @@ const InputTag = ({ id, type, value, onChange ,label,inputSymbol}) => {
         id={id}
         type={type}
         value={value}
-        className="cursor-pointer w-full font-plusJakarta rounded-tr-md rounded-br outline-none px-4 text-lg font-bold text-slate-900
-        
-        [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none
+        className="cursor-pointer w-full font-plusJakarta rounded-tr-md rounded-br  outline-none px-4 text-lg font-bold text-slate-900
+        remove-default-appearance remove-autofill-bg
         "
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}

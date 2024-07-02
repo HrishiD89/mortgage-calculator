@@ -2,3 +2,57 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+
+@media (max-width: 365px) {
+    .hide-on-small-screen {
+      display: none;
+    }
+  }
+
+@layer components {
+    .remove-default-appearance {
+        appearance: textfield;
+        &::-webkit-outer-spin-button {
+            appearance: none;
+        }
+        &::-webkit-inner-spin-button {
+            appearance: none;
+        }
+    }
+    .remove-autofill-bg {
+        -webkit-autofill: none;
+        -webkit-box-shadow: 0 0 0 30px white inset;
+    }
+
+    .custom-radio {
+        appearance: none;
+        border: 1px solid hsl(200, 24%, 40%);
+        width: 14px;
+        height: 14px;
+        padding: 0;
+        border-radius: 100%;
+        position: absolute;
+        left:17px;
+        top:17px;
+    }
+    .custom-radio:checked {
+        border-color: hsl(61, 70%, 52%); /* Yellow border for checked state */
+    }
+    .custom-radio:checked:before {
+        content: '';
+        background-color: hsl(61, 70%, 52%);
+        width: 8px;
+        height: 8px;
+        border-radius: 100%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        position: absolute;
+    }
+
+    .radio-btn-container  {
+        @apply focus-within:bg-lightLime  cursor-pointer flex justify-start items-center w-full border border-slate-700 rounded-md h-12 my-3.5 focus-within:ring-2 focus-within:ring-lime relative
+    }
+}

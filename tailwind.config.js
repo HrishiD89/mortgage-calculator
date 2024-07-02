@@ -17,7 +17,7 @@ export default {
           500: 'hsl(200, 26%, 54%)',
           700: 'hsl(200, 24%, 40%)',
           900: 'hsl(202, 55%, 16%)',
-          
+          darkGreen : '#0e2431', 
         },
       },
       fontFamily: {
