@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useContext } from "react";
+import MortgageContext from "../context/MortgageContext";
 import emptyResultlogo from "../assets/images/illustration-empty.svg";
 
 const Result = () => {
-  const [isResultAvailable, setIsResultAvailable] = useState(false);
+  const { result, isResultAvailable } = useContext(MortgageContext);
 
   return (
     <section
@@ -32,7 +33,7 @@ const Result = () => {
                     Your monthly repayment
                   </p>
                   <div className="pb-6 pt-4 border-b-[1px] border-[#2b414e] mb-6">
-                    <h1 className="text-5xl font-bold text-lime">£1,797.74</h1>
+                    <h1 className="text-5xl font-bold text-lime">£{result.monthlyRepayment.toFixed(2)}</h1>
                   </div>
                 </div>
                 <div>
@@ -40,7 +41,7 @@ const Result = () => {
                     Total you&apos;ll repay over the term
                   </p>
                   <h4 className=" font-bold text-xl text-white my-3">
-                    $539,322.94
+                  £{result.totalRepayment.toFixed(2)}
                   </h4>
                 </div>
               </div>

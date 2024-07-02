@@ -1,22 +1,22 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import InputTag from "../components/Inputs.component";
 import CalIcon from "../assets/images/icon-calculator.svg";
+import MortgageContext from "../context/MortgageContext";
 
 const InputForm = () => {
+
+  const {updateResult,clearResult} = useContext(MortgageContext)
+
   const [formData, setFormData] = useState({
     mortgageAmt: "",
     interestRate: "",
     mortgageTerm: "",
     mortgageType: "",
   });
-  const [result, setResult] = useState({
-    monthlyRepayment: 0,
-    totalRepayment: 0,
-  });
   const [errors, setErrors] = useState({});
 
   const handleInputChange = (e) => {
-    const { id, value } = e.target;
+    const { id, value, type } = e.target;
     let formattedValue = value;
     
     if (id === "mortgageAmt") {
@@ -24,13 +24,21 @@ const InputForm = () => {
         .replace(/\D/g, "")
         .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
-
-    setFormData((prevData) => ({
-      ...prevData,
-      [id]: formattedValue,
-    }));
+  
+    if (type === "radio") {
+      setFormData((prevData) => ({
+        ...prevData,
+        mortgageType: value,
+      }));
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        [id]: formattedValue,
+      }));
+    }
   };
 
+  
   const validateForm = () => {
     const newErrors = {};
     const { mortgageAmt, interestRate, mortgageTerm, mortgageType } = formData;
@@ -62,7 +70,7 @@ const InputForm = () => {
 
     const totalRepayment = monthlyRepayment * n;
     
-    setResult({
+    updateResult({
       monthlyRepayment,
       totalRepayment,
     });
@@ -83,10 +91,7 @@ const InputForm = () => {
       mortgageType: "",
     });
     setErrors({});
-    setResult({
-      monthlyRepayment: 0,
-      totalRepayment: 0,
-    });
+    clearResult();
   };
 
   return (

@@ -32,18 +32,16 @@ const InputTag = ({
         />
         <span
           htmlFor={id}
-          className={`px-4 flex h-full py-2 justify-center items-center font-bold  
-          ${errorMssg ? "bg-red text-white" : "bg-slate-100"}
-          }
-
-        ${isFocused ? "bg-lime text-slate-900" : "bg-slate-100"}
-        ${
-          id === "mortgageAmt"
-            ? "rounded-tl-md rounded-bl-md"
-            : "rounded-tr-md rounded-br-md"
-        } 
-        
-        `}
+        className={`px-4 flex h-full py-2 justify-center items-center font-bold  
+  ${isFocused ? "bg-lime text-slate-900" : 
+    errorMssg ? "bg-red text-white" : "bg-slate-100"
+  }
+  ${
+    id === "mortgageAmt"
+      ? "rounded-tl-md rounded-bl-md"
+      : "rounded-tr-md rounded-br-md"
+  }
+`}
         >
           {inputSymbol}
         </span>
